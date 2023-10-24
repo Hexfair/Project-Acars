@@ -4,6 +4,7 @@ import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
 import { AircraftService } from './aircraft/aircraft.service';
 import { AcarsService } from './acars/acars.service';
+import { Acars } from './acars/acars.entity';
 //=========================================================================================================================
 dayjs.extend(utc);
 //=========================================================================================================================
@@ -15,10 +16,12 @@ export class AppService {
 		private readonly acarsService: AcarsService,
 	) { }
 
-	async onRunParser(html: string): Promise<void> {
+	async onRunParser(html: string): Promise<Acars> {
 		let $ = cheerio.load(html);
-		const elems = $('div.tabulator-row');
-		console.log(elems.length);
+		console.log(html);
+		const elems = $('.tabulator-row');
+
+
 		for (let item of elems) {
 			const hex = $(item).find('div[tabulator-field="ICAO"]').text().trim();
 			const reg = $(item).find('div[tabulator-field="Rego"]').text().trim();
@@ -37,16 +40,21 @@ export class AppService {
 
 			const checkLastAcars = await this.acarsService.findLastAcars(aircraftData.hex)
 
+			const acarsParams = {
+				aircraft: aircraftData,
+				text,
+				timestamp
+			}
+
+			if (!checkLastAcars) {
+				return await this.acarsService.create(acarsParams);
+			}
+
 			const dateAcarsFromHtml = dayjs(timestamp);
 			const dateLastAcars = dayjs(checkLastAcars.timestamp);
 
 			if (dateAcarsFromHtml.isBefore(dateLastAcars)) {
-				const acarsParams = {
-					aircraft: aircraftData,
-					text,
-					timestamp
-				}
-				await this.acarsService.create(acarsParams);
+				return await this.acarsService.create(acarsParams);
 			}
 		}
 	}
