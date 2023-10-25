@@ -22,6 +22,12 @@ export class Acars {
 	@Column()
 	program: string;
 
+	@Column()
+	from: string;
+
+	@Column()
+	to: string;
+
 	@CreateDateColumn()
 	createdAt: Date;
 }

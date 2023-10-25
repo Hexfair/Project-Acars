@@ -14,7 +14,7 @@ export class AcarsService {
 	/* Сохранение акарса в базу */
 	async create(createAcarsDto: CreateAcarsDto) {
 		try {
-			const qqqq = await this.acarsRepository.save(createAcarsDto);
+			await this.acarsRepository.save(createAcarsDto);
 		} catch (error) {
 			console.log(error);
 		}
@@ -26,10 +26,10 @@ export class AcarsService {
 			const allAcarsByAircraft = await this.acarsRepository.find({
 				relations: { aircraft: true },
 				where: [{ aircraft: { hex: hex } }],
-				order: { createdAt: 'ASC' }
+				order: { timestamp: 'ASC' }
 			})
 			if (!allAcarsByAircraft) {
-				return null
+				return null;
 			} else {
 				return allAcarsByAircraft.at(-1);
 			}

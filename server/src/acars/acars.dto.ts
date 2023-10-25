@@ -7,4 +7,16 @@ export class CreateAcarsDto {
 
 	@IsString()
 	timestamp: string;
+
+	@IsString()
+	callsign: string;
+
+	@IsString()
+	program: string;
+
+	@IsString()
+	from: string;
+
+	@IsString()
+	to: string;
 }

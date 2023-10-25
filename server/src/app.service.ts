@@ -18,9 +18,13 @@ export class AppService {
 
 	async onRunParser(html: string): Promise<void> {
 		try {
+			if (html.length === 0) {
+				return
+			}
+
 			const elems = htmlParser(html);
 
-			for (let i = 0; i < elems.length; i++) {
+			for (let i = elems.length - 1; i >= 0; i--) {
 				const elemParams = elemsParser(elems[i]);
 				const paramsFromAcars = findFlightParams(elemParams.text);
 
@@ -28,6 +32,7 @@ export class AppService {
 					hex: elemParams.hex,
 					reg: elemParams.reg,
 					type: elemParams.type,
+					description: elemParams.description
 				}
 
 				const aircraftData = await this.aircraftService.create(aircraftParams);
@@ -38,7 +43,9 @@ export class AppService {
 					text: elemParams.text,
 					timestamp: paramsFromAcars.timestamp || elemParams.timestamp,
 					callsign: paramsFromAcars.callsign,
-					program: paramsFromAcars.program
+					program: paramsFromAcars.program,
+					from: paramsFromAcars.from,
+					to: paramsFromAcars.to,
 				}
 
 				if (!checkLastAcars) {
@@ -46,7 +53,8 @@ export class AppService {
 				} else {
 					const dateAcarsFromHtml = dayjs(elemParams.timestamp);
 					const dateLastAcars = dayjs(checkLastAcars.timestamp);
-					if (dateAcarsFromHtml.isBefore(dateLastAcars)) {
+
+					if (dateAcarsFromHtml.isAfter(dateLastAcars)) {
 						await this.acarsService.create(acarsParams);
 					}
 				}

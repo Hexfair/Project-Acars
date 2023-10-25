@@ -10,4 +10,7 @@ export class CreateAircraftDto {
 
 	@IsString()
 	type: string;
+
+	@IsString()
+	description: string;
 }

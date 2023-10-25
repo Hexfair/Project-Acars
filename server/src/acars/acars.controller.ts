@@ -5,6 +5,11 @@ import { AcarsService } from './acars.service';
 export class AcarsController {
 	constructor(private readonly acarsService: AcarsService) { }
 
+	@Get(':id')
+	findLastAcars(@Param('id') id: string) {
+		return this.acarsService.findLastAcars(id);
+	}
+
 	// @Post()
 	// create(@Body() createAcarDto: CreateAcarDto) {
 	// 	return this.acarsService.create(createAcarDto);

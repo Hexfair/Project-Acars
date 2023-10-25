@@ -16,6 +16,9 @@ export class Aircraft {
 	@Column()
 	type: string;
 
+	@Column()
+	description: string;
+
 	@OneToMany(() => Acars, (acars) => acars.aircraft)
 	acars: Acars[];
 

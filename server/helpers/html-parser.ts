@@ -17,7 +17,8 @@ export const elemsParser = (item: cheerio.Element) => {
 	const type = cheerioAPI(item).find('div[tabulator-field="Type"]').text().trim();
 	const text = cheerioAPI(item).find('div[tabulator-field="Raw"]').text().trim();
 	const timestamp = cheerioAPI(item).find('div[tabulator-field="Timestamp"]').text().trim();
+	const description = cheerioAPI(item).find('div[tabulator-field="Desc"]').text().trim();
 
-	return { hex, reg, type, text, timestamp }
+	return { hex, reg, type, text, timestamp, description }
 }
 
