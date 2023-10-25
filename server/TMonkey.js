@@ -13,36 +13,24 @@
 (function () {
 	'use strict';
 
-	setTimeout(() => {
+	setInterval(async () => {
 		let elems = document.getElementsByClassName('tabulator-row');
 
 		let str = '';
-		for (let i = 0; i < 20; i++) {
-			console.log(i)
-			str = str + elems[i].innerHTML;
+		for (let i = 0; i < elems.length; i++) {
+			str = str + elems[i].outerHTML;
 		};
 
-		let str2 = '';
-		for (let i = 20; i < elems.length; i++) {
-			str2 = str2 + elems[i].innerHTML;
-		};
-
-		fetch('http://localhost:5001/api', {
+		await fetch('http://localhost:5001/api', {
 			method: "POST",
 			mode: "no-cors",
 			body: str
 		});
 
-		fetch('http://localhost:5001/api', {
-			method: "POST",
-			mode: "no-cors",
-			body: str2
-		});
-
 		setTimeout(() => {
 			location.replace('https://acars.adsbexchange.com/#!/13');
 			location.reload();
-		}, 420000);
+		}, 900000);
 
-	}, 45000);
+	}, 180000);
 })();

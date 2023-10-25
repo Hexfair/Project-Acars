@@ -7,7 +7,7 @@ async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 	app.setGlobalPrefix('/api');
 	app.enableCors();
-	app.useBodyParser('text', { bodyLimit: 10_485_760 });
+	app.useBodyParser('text', { limit: '10mb' });
 	await app.listen(5001);
 }
 bootstrap();

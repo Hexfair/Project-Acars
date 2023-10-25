@@ -4,7 +4,7 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } f
 
 @Entity()
 export class Aircraft {
-	@PrimaryGeneratedColumn({ name: 'aircraft' })
+	@PrimaryGeneratedColumn({ name: 'aircraft_id' })
 	id: number;
 
 	@Column({ unique: true })

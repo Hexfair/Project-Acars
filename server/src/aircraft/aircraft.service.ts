@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Aircraft } from './aircraft.entity';
 import { Repository } from 'typeorm';
 import { CreateAircraftDto } from './aircraft.dto';
+//=========================================================================================================================
 
 @Injectable()
 export class AircraftService {
@@ -11,15 +12,18 @@ export class AircraftService {
 	) { }
 
 	async create(createAircraftDto: CreateAircraftDto) {
-		const checkAircraft = await this.aircraftRepository.findOne({
-			where: { hex: createAircraftDto.hex },
-		});
+		try {
+			const checkAircraft = await this.aircraftRepository.findOne({
+				where: { hex: createAircraftDto.hex },
+			});
 
-		if (checkAircraft) {
-			return checkAircraft;
+			if (checkAircraft) {
+				return checkAircraft;
+			}
+			return await this.aircraftRepository.save(createAircraftDto);
+		} catch (error) {
+			console.log(error);
 		}
-
-		return await this.aircraftRepository.save(createAircraftDto);
 	}
 
 

@@ -16,6 +16,12 @@ export class Acars {
 	@Column()
 	timestamp: string;
 
+	@Column()
+	callsign: string;
+
+	@Column()
+	program: string;
+
 	@CreateDateColumn()
 	createdAt: Date;
 }

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import * as cheerio from 'cheerio';
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
 import { AircraftService } from './aircraft/aircraft.service';
 import { AcarsService } from './acars/acars.service';
-import { Acars } from './acars/acars.entity';
+import { findFlightParams } from 'helpers/find-flightParams';
+import { elemsParser, htmlParser } from 'helpers/html-parser';
 //=========================================================================================================================
 dayjs.extend(utc);
 //=========================================================================================================================
@@ -16,46 +16,45 @@ export class AppService {
 		private readonly acarsService: AcarsService,
 	) { }
 
-	async onRunParser(html: string): Promise<Acars> {
-		let $ = cheerio.load(html);
-		console.log(html);
-		const elems = $('.tabulator-row');
+	async onRunParser(html: string): Promise<void> {
+		try {
+			const elems = htmlParser(html);
 
+			for (let i = 0; i < elems.length; i++) {
+				const elemParams = elemsParser(elems[i]);
+				const paramsFromAcars = findFlightParams(elemParams.text);
 
-		for (let item of elems) {
-			const hex = $(item).find('div[tabulator-field="ICAO"]').text().trim();
-			const reg = $(item).find('div[tabulator-field="Rego"]').text().trim();
-			const type = $(item).find('div[tabulator-field="Type"]').text().trim();
-			const text = $(item).find('div[tabulator-field="Raw"]').text().trim();
-			const timestamp = $(item).find('div[tabulator-field="Timestamp"]').text().trim();
+				const aircraftParams = {
+					hex: elemParams.hex,
+					reg: elemParams.reg,
+					type: elemParams.type,
+				}
 
-			console.log(hex, reg, type, text, timestamp);
-			const aircraftParams = {
-				hex,
-				reg,
-				type,
+				const aircraftData = await this.aircraftService.create(aircraftParams);
+				const checkLastAcars = await this.acarsService.findLastAcars(aircraftData.hex);
+
+				const acarsParams = {
+					aircraft: aircraftData,
+					text: elemParams.text,
+					timestamp: paramsFromAcars.timestamp || elemParams.timestamp,
+					callsign: paramsFromAcars.callsign,
+					program: paramsFromAcars.program
+				}
+
+				if (!checkLastAcars) {
+					await this.acarsService.create(acarsParams);
+				} else {
+					const dateAcarsFromHtml = dayjs(elemParams.timestamp);
+					const dateLastAcars = dayjs(checkLastAcars.timestamp);
+					if (dateAcarsFromHtml.isBefore(dateLastAcars)) {
+						await this.acarsService.create(acarsParams);
+					}
+				}
 			}
 
-			const aircraftData = await this.aircraftService.create(aircraftParams);
-
-			const checkLastAcars = await this.acarsService.findLastAcars(aircraftData.hex)
-
-			const acarsParams = {
-				aircraft: aircraftData,
-				text,
-				timestamp
-			}
-
-			if (!checkLastAcars) {
-				return await this.acarsService.create(acarsParams);
-			}
-
-			const dateAcarsFromHtml = dayjs(timestamp);
-			const dateLastAcars = dayjs(checkLastAcars.timestamp);
-
-			if (dateAcarsFromHtml.isBefore(dateLastAcars)) {
-				return await this.acarsService.create(acarsParams);
-			}
+		} catch (error) {
+			console.log(error);
 		}
 	}
 }
+

@@ -6,9 +6,11 @@ import { AircraftModule } from './aircraft/aircraft.module';
 import { AcarsModule } from './acars/acars.module';
 import { Aircraft } from './aircraft/aircraft.entity';
 import { Acars } from './acars/acars.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
 	imports: [
+		ScheduleModule.forRoot(),
 		TypeOrmModule.forRoot({
 			type: 'postgres',
 			host: 'localhost',

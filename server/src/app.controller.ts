@@ -13,7 +13,7 @@ export class AppController {
 	}
 
 	@Post()
-	fromBrowserRequest(@Body() html: string): Promise<Acars> {
+	fromBrowserRequest(@Body() html: string): Promise<void> {
 		return this.appService.onRunParser(html);
 	}
 }

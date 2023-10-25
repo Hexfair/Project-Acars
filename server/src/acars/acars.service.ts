@@ -13,18 +13,29 @@ export class AcarsService {
 
 	/* Сохранение акарса в базу */
 	async create(createAcarsDto: CreateAcarsDto) {
-		return await this.acarsRepository.save(createAcarsDto);
+		try {
+			const qqqq = await this.acarsRepository.save(createAcarsDto);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	/* Получение последнего акарса конкретного самолета */
 	async findLastAcars(hex: string) {
-		const allAcarsByAircraft = await this.acarsRepository.find({
-			relations: { aircraft: true },
-			where: [{ aircraft: { hex: hex } }],
-			order: { createdAt: 'ASC' }
-		})
-
-		return allAcarsByAircraft.at(-1);
+		try {
+			const allAcarsByAircraft = await this.acarsRepository.find({
+				relations: { aircraft: true },
+				where: [{ aircraft: { hex: hex } }],
+				order: { createdAt: 'ASC' }
+			})
+			if (!allAcarsByAircraft) {
+				return null
+			} else {
+				return allAcarsByAircraft.at(-1);
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	findAll() {
