@@ -28,12 +28,10 @@ export const findFlightParams = (text: string) => {
 	}
 
 	if (textWithoutSpace.includes('MDINI') && checkReg3) {
-		const arr = checkReg1[0].slice(3, -1).split(',');
-		obj.from = arr[1];
-		obj.to = arr[2];
+		const arr = checkReg3[0].slice(3, -1).split(',');
+		obj.from = arr[0];
+		obj.to = arr[1];
 	}
 
 	return obj;
 }
-
-// 2023-10-25T17:16:51.044Z AE145B GES:90 2 .66157A 	- #MDINI/ID66157A,RCH600,PVM6255Z1295/MR0,0/AFETAD,KBGR/TD251717,1845E176

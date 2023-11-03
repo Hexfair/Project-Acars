@@ -13,14 +13,14 @@ export class Acars {
 	@Column()
 	text: string;
 
-	@Column()
-	timestamp: string;
+	@Column({ type: 'timestamptz' })
+	timestamp: Date;
 
 	@Column()
 	callsign: string;
 
 	@Column()
-	program: string;
+	mission: string;
 
 	@Column()
 	from: string;
@@ -28,6 +28,6 @@ export class Acars {
 	@Column()
 	to: string;
 
-	@CreateDateColumn()
+	@CreateDateColumn({ type: 'timestamp with time zone' })
 	createdAt: Date;
 }

@@ -12,8 +12,13 @@ export class AppController {
 		return 'Работает';
 	}
 
-	@Post()
-	fromBrowserRequest(@Body() html: string): Promise<void> {
-		return this.appService.onRunParser(html);
+	// @Post()
+	// fromBrowserRequest(@Body() html: string): Promise<void> {
+	// 	return this.appService.onRunParser(html);
+	// }
+
+	@Post('acars')
+	fetchFromBrowser(@Body() data: any): Promise<void> {
+		return this.appService.fetchFromBrowser(data);
 	}
 }

@@ -6,13 +6,13 @@ export class CreateAcarsDto {
 	text: string;
 
 	@IsString()
-	timestamp: string;
+	timestamp: Date;
 
 	@IsString()
 	callsign: string;
 
 	@IsString()
-	program: string;
+	mission: string;
 
 	@IsString()
 	from: string;
