@@ -1,6 +1,5 @@
 const regexp = /\/ID\w{4,6}\,\w{5,7}\,[a-zA-Z]{3}\w{6}\d{3}\//i;
 
-// /AFETAD,KBGR/
 export const findMission = (text: string) => {
 	const textWithoutSpace = text.replace(/\s/, '');
 	const checkReg = textWithoutSpace.match(regexp);
@@ -10,5 +9,5 @@ export const findMission = (text: string) => {
 		return arr[2];
 	}
 
-	return 'n/a';
+	return '-';
 }

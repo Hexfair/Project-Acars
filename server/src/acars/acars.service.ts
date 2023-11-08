@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAcarsDto } from './acars.dto';
+import { CreateAcarsDto, GetMoreAcarsDto, SearchAcarsDto } from './acars.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Acars } from './acars.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 //=========================================================================================================================
 
 @Injectable()
@@ -38,19 +38,42 @@ export class AcarsService {
 		}
 	}
 
-	findAll() {
-		return `This action returns all acars`;
+	/* Получение акарсов (100 штук) */
+	async findAll() {
+		return await this.acarsRepository.find({
+			relations: { aircraft: true },
+			order: { timestamp: 'DESC' },
+			take: 100,
+		});
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} acar`;
+	/* Получение порции акарсов (по 100 штук) */
+	async getMoreAcars(payload: GetMoreAcarsDto) {
+		const countMessages = 100;
+
+		return await this.acarsRepository.find({
+			relations: { aircraft: true },
+			order: { timestamp: 'DESC' },
+			take: countMessages,
+			skip: (payload.page - 1) * countMessages,
+		});
 	}
 
-	// update(id: number, updateAcarDto: UpdateAcarDto) {
-	// 	return `This action updates a #${id} acar`;
-	// }
+	/* Поиск акарса по тексту */
+	async searchByText(payload: SearchAcarsDto) {
+		const acars = await this.acarsRepository.find({
+			relations: { aircraft: true },
+			where: {
+				text: ILike(`%${payload.searchAcarsTextValue}%`),
+			},
+			order: { timestamp: 'DESC' },
+		});
 
-	remove(id: number) {
-		return `This action removes a #${id} acar`;
+		return acars.filter(obj =>
+			obj.aircraft.hex.toLowerCase().includes(payload.searchAircraftTextValue.toLowerCase())
+			|| obj.aircraft.reg.toLowerCase().includes(payload.searchAircraftTextValue.toLowerCase())
+			|| obj.aircraft.type.toLowerCase().includes(payload.searchAircraftTextValue.toLowerCase())
+			|| obj.aircraft.description.toLowerCase().includes(payload.searchAircraftTextValue.toLowerCase())
+			|| obj.callsign.toLowerCase().includes(payload.searchAircraftTextValue.toLowerCase()))
 	}
 }

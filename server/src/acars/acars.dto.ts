@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 //=========================================================================================================================
 
 export class CreateAcarsDto {
@@ -20,3 +20,17 @@ export class CreateAcarsDto {
 	@IsString()
 	to: string;
 }
+
+export class GetMoreAcarsDto {
+	@IsNumber()
+	page: number;
+}
+
+export class SearchAcarsDto {
+	@IsString()
+	searchAcarsTextValue: string;
+
+	@IsString()
+	searchAircraftTextValue: string;
+}
+

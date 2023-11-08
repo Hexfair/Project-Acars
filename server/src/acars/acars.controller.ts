@@ -1,37 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AcarsService } from './acars.service';
+import { GetMoreAcarsDto, SearchAcarsDto } from './acars.dto';
+//=========================================================================================================================
 
 @Controller('acars')
 export class AcarsController {
 	constructor(private readonly acarsService: AcarsService) { }
 
-	@Get(':id')
-	findLastAcars(@Param('id') id: string) {
-		return this.acarsService.findLastAcars(id);
+	@Get()
+	findAll() {
+		return this.acarsService.findAll();
 	}
 
-	// @Post()
-	// create(@Body() createAcarDto: CreateAcarDto) {
-	// 	return this.acarsService.create(createAcarDto);
-	// }
+	@Post('more')
+	getMoreAcars(@Body() getMoreAcarsDto: GetMoreAcarsDto) {
+		return this.acarsService.getMoreAcars(getMoreAcarsDto);
+	}
 
-	// @Get()
-	// findAll() {
-	// 	return this.acarsService.findAll();
-	// }
-
-	// @Get(':id')
-	// findOne(@Param('id') id: string) {
-	// 	return this.acarsService.findOne(+id);
-	// }
-
-	// @Patch(':id')
-	// update(@Param('id') id: string, @Body() updateAcarDto: UpdateAcarDto) {
-	// 	return this.acarsService.update(+id, updateAcarDto);
-	// }
-
-	// @Delete(':id')
-	// remove(@Param('id') id: string) {
-	// 	return this.acarsService.remove(+id);
-	// }
+	@Post('search')
+	searchByText(@Body() searchAcarsDto: SearchAcarsDto) {
+		return this.acarsService.searchByText(searchAcarsDto);
+	}
 }

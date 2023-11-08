@@ -1,0 +1,29 @@
+/* Обнуление */
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+body {
+	max-width: 100vw;
+	height: 100vh;
+	padding: 10px;
+	position: relative;
+}
+
+a {
+	text-decoration: none;
+	list-style: none;
+}
+
+/* Colors */
+:root {
+	--primary: #3F51B5;
+	--primary-light: #8b9bf8;
+	--primary-extra-light: #e8ebff;
+	--white: #ffffff;
+	--primary2: #b971f3;
+	--primary2-light: #e3c5fc;
+}

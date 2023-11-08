@@ -25,21 +25,4 @@ export class AircraftService {
 			console.log(error);
 		}
 	}
-
-
-	findAll() {
-		return `This action returns all aircraft`;
-	}
-
-	findOne(id: number) {
-		return `This action returns a #${id} aircraft`;
-	}
-
-	// update(id: number, updateAircraftDto: UpdateAircraftDto) {
-	// 	return `This action updates a #${id} aircraft`;
-	// }
-
-	remove(id: number) {
-		return `This action removes a #${id} aircraft`;
-	}
 }
